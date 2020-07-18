@@ -1,26 +1,125 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
+import Canvas from "./Canvas";
+import Photo from "./Photo";
+import Header from "./Header";
+import Credits from "./Credits";
 
-function App() {
+export default function App() {
+  let [queriedImages, setQueriedImages] = useState([]);
+  let [imageURL, setImageURL] = useState("");
+  let [pageURL, setPageURL] = useState("");
+  let [credits, setCredits] = useState("");
+  let [isDrawing, setIsDrawing] = useState(false);
+  let [query, setQuery] = useState("");
+  let [isPhotoHidden, setIsPhotoHidden] = useState(false);
+  let [isCanvasHidden, setIsCanvasHidden] = useState(false);
+
+  let randInt = 0;
+  //let floatingPhotos = <div/>
+
+  const url = "https://pixabay.com/api/?";
+  const key = "17250054-9a24b7d53aefd7414a31696cd";
+  const type = "photo";
+
+  useEffect(() => {
+    loadImages();
+  }, [query]);
+
+  function handleChange(event) {
+    switch (event.target.name) {
+      case "queryInput":
+        setQuery(event.target.value);
+        break;
+      default:
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "enter") {
+      console.log("asdfasdf");
+    }
+  }
+
+  function handleClick(event) {
+    switch (event.target.name) {
+      case "getImage":
+        console.log(query);
+        queriedImages.length === 0
+          ? (randInt = 0)
+          : (randInt = getRandInt(queriedImages.hits.length));
+        loadImages();
+        try {
+          setImageURL(queriedImages.hits[randInt].largeImageURL);
+          setCredits(queriedImages.hits[randInt].user);
+          setPageURL(queriedImages.hits[randInt].pageURL);
+        } catch (err) {
+          alert("No search results found");
+        }
+        break;
+      case "setQuery":
+        console.log(query);
+        break;
+      case "hidePhoto":
+        setIsPhotoHidden(prevState => !prevState);
+        console.log(isPhotoHidden);
+        break;
+      case "hideCanvas":
+        setIsCanvasHidden(prevState => !prevState);
+        console.log(isPhotoHidden);
+        break;
+      default:
+        console.log(event.target.name);
+    }
+  }
+
+  function loadImages() {
+    let fullURL = "";
+    query
+      ? (fullURL = url + "key=" + key + "&q=" + query + "&image_type=" + type)
+      : (fullURL = url + "key=" + key + "&image_type=" + type);
+
+    fetch(fullURL)
+      .then(response => response.json())
+      .then(data => setQueriedImages(data))
+      .catch(error => {
+        console.error(error);
+      });
+    console.log(queriedImages);
+    //console.log(queriedImages.hits[randInt].largeImageURL)
+    //setImageURL(fetchedData.hits[randInt -1].largeImageURL)
+    //if (queriedImages.length !== 0) {
+    //console.log(queriedImages.length)
+    //floatingPhotos = queriedImages.hits.map((imgURL) => <img src = {imgURL.largeImageURL} alt="lmao"></img>)
+    //}
+  }
+  function getRandInt(maxInt) {
+    return Math.floor(Math.random() * maxInt);
+  }
+  //setImageURL(fetchedData.hits[0].largeImageURL);
+  //<Photo imageURL={imageURL} />
+  //<input onChange = {handleChange}/>
+  //{
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header onClick={handleClick} />
+      <div>{query}</div>
+      <button name="getImage" onClick={handleClick} onKeyDown={handleKeyDown}>
+        Get Photo
+      </button>
+      <input
+        name="queryInput"
+        onChange={handleChange}
+        placeholder="Enter search terms here"
+      />
+      {isPhotoHidden ? null : <Photo imageURL={imageURL} />}
+      {isCanvasHidden ? null : (
+        <Canvas isDrawing={isDrawing} setIsDrawing={setIsDrawing} />
+      )}
+      {imageURL === "" || isPhotoHidden ? null : (
+        <Credits credits={credits} pageURL={pageURL} />
+      )}
     </div>
   );
 }
-
-export default App;
