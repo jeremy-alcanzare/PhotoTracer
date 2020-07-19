@@ -7,10 +7,18 @@
 
 .clearButton {
   position: absolute;
-  top: 29px;
+  top: 10px;
   left: 900px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.CheckboxLabel {
+  color: white;
+}
+
+.queryOutput {
+  color: lightgrey;
 }
 
 .Canvas {

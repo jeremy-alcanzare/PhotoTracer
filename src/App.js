@@ -4,6 +4,9 @@ import Canvas from "./Canvas";
 import Photo from "./Photo";
 import Header from "./Header";
 import Credits from "./Credits";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import { Button, Navbar, Footer } from "react-bootstrap";
+import { SketchPicker } from "react-color";
 
 export default function App() {
   let [queriedImages, setQueriedImages] = useState([]);
@@ -103,16 +106,23 @@ export default function App() {
 
   return (
     <div className="App">
-      <Header onClick={handleClick} />
-      <div>{query}</div>
-      <button name="getImage" onClick={handleClick} onKeyDown={handleKeyDown}>
-        Get Photo
-      </button>
-      <input
-        name="queryInput"
-        onChange={handleChange}
-        placeholder="Enter search terms here"
-      />
+      <Navbar bg="dark" expand="lg" className="mr-auto">
+        <Header onClick={handleClick} />
+        <Button
+          variant="success"
+          name="getImage"
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
+        >
+          Get Photo
+        </Button>
+        <input
+          name="queryInput"
+          onChange={handleChange}
+          placeholder="Enter search terms here"
+        />
+        <div className="queryOutput">{query}</div>
+      </Navbar>
       {isPhotoHidden ? null : <Photo imageURL={imageURL} />}
       {isCanvasHidden ? null : (
         <Canvas isDrawing={isDrawing} setIsDrawing={setIsDrawing} />
@@ -123,3 +133,4 @@ export default function App() {
     </div>
   );
 }
+

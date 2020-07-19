@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { Button } from "react-bootstrap";
 
 export default function Canvas(props) {
   const canvasRef = useRef(null);
@@ -52,7 +53,7 @@ export default function Canvas(props) {
 
   return (
     <div>
-      <button className = "clearButton" onClick={clearCanvas}>Clear</button>
+      <Button className = "clearButton" onClick={clearCanvas}>Clear</Button>
       <canvas
         className="Canvas"
         onMouseDown={startDrawing}
