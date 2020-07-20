@@ -105,7 +105,7 @@ export default function App() {
   //{
 
   return (
-    <div className="App">
+    <React.Fragment>
       <Navbar bg="dark" expand="lg" className="mr-auto">
         <Header onClick={handleClick} />
         <Button
@@ -130,7 +130,7 @@ export default function App() {
       {imageURL === "" || isPhotoHidden ? null : (
         <Credits credits={credits} pageURL={pageURL} />
       )}
-    </div>
+    </React.Fragment>
   );
 }
 
