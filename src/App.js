@@ -127,12 +127,12 @@ export default function App() {
         <div className="queryOutput">{query}</div>
       </Navbar>
       </Container>
-      <div className="CanvasContainer">
+      <Container fluid>
       {isPhotoHidden ? null : <Photo imageURL={imageURL} />}
       {isCanvasHidden ? null : (
         <Canvas isDrawing={isDrawing} setIsDrawing={setIsDrawing} />
       )}
-      </div>
+      </Container>
       {imageURL === "" || isPhotoHidden ? null : (
         <Credits credits={credits} pageURL={pageURL} />
       )}
