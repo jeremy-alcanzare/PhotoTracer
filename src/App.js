@@ -5,7 +5,7 @@ import Photo from "./Photo";
 import Header from "./Header";
 import Credits from "./Credits";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import { Button, Navbar, Footer } from "react-bootstrap";
+import { Button, Navbar, Container } from "react-bootstrap";
 import { SketchPicker } from "react-color";
 
 export default function App() {
@@ -106,9 +106,11 @@ export default function App() {
 
   return (
     <React.Fragment>
+      <Container fluid>
       <Navbar bg="dark" expand="lg" className="mr-auto">
         <Header onClick={handleClick} />
         <Button
+          className="mr-sm-2"
           variant="success"
           name="getImage"
           onClick={handleClick}
@@ -117,16 +119,20 @@ export default function App() {
           Get Photo
         </Button>
         <input
+          className="mr-sm-2"
           name="queryInput"
           onChange={handleChange}
           placeholder="Enter search terms here"
         />
         <div className="queryOutput">{query}</div>
       </Navbar>
+      </Container>
+      <div className="CanvasContainer">
       {isPhotoHidden ? null : <Photo imageURL={imageURL} />}
       {isCanvasHidden ? null : (
         <Canvas isDrawing={isDrawing} setIsDrawing={setIsDrawing} />
       )}
+      </div>
       {imageURL === "" || isPhotoHidden ? null : (
         <Credits credits={credits} pageURL={pageURL} />
       )}

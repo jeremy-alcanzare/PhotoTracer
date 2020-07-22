@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Button } from "react-bootstrap";
+import { Button , Container } from "react-bootstrap";
 
 export default function Canvas(props) {
   const canvasRef = useRef(null);
@@ -52,7 +52,7 @@ export default function Canvas(props) {
   };
 
   return (
-    <div>
+    <Container>
       <Button className = "clearButton" onClick={clearCanvas}>Clear</Button>
       <canvas
         className="Canvas"
@@ -61,6 +61,6 @@ export default function Canvas(props) {
         onMouseMove={draw}
         ref={canvasRef}
       />
-    </div>
+    </Container>
   );
 }
