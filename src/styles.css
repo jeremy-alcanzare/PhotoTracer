@@ -5,21 +5,16 @@
   --background-color: rgba(100, 100, 180);
 }
 
-.clearButton {
-  position: absolute;
-  top: 10px;
-  left: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .CheckboxLabel {
   color: white;
 }
 
-
 .queryOutput {
   color: lightgrey;
+}
+
+.Navbar {
+  min-height: 100px;
 }
 
 .Canvas {
@@ -31,8 +26,13 @@
   box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.75);
 }
 
+.CanvasContainer {
+  position: abosolute;
+  height: 1500px;
+}
+
 .Photo {
-  position: relative;
+  position: absolute;
   top: 100px;
   display: block;
   max-height: 1000px;
@@ -43,6 +43,6 @@
 
 .Credits {
   position: absolute;
-  bottom: 0;
+  bottom: -180px;
   width: 100%;
 }

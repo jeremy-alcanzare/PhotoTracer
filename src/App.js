@@ -4,9 +4,10 @@ import Canvas from "./Canvas";
 import Photo from "./Photo";
 import Header from "./Header";
 import Credits from "./Credits";
+import Footer from "./Footer";
+import bootstrap from "bootstrap"; // eslint-disable-line no-unused-vars
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import { Button, Navbar, Container } from "react-bootstrap";
-import { SketchPicker } from "react-color";
+import { Container, Button, Navbar } from "react-bootstrap";
 
 export default function App() {
   let [queriedImages, setQueriedImages] = useState([]);
@@ -20,6 +21,8 @@ export default function App() {
 
   let randInt = 0;
   //let floatingPhotos = <div/>
+
+  //TODO: add loading screen
 
   const url = "https://pixabay.com/api/?";
   const key = "17250054-9a24b7d53aefd7414a31696cd";
@@ -39,8 +42,9 @@ export default function App() {
   }
 
   function handleKeyDown(event) {
-    if (event.key === "enter") {
-      console.log("asdfasdf");
+    if (event.key === "Enter") {
+      console.log(query);
+      displayImage();
     }
   }
 
@@ -48,17 +52,7 @@ export default function App() {
     switch (event.target.name) {
       case "getImage":
         console.log(query);
-        queriedImages.length === 0
-          ? (randInt = 0)
-          : (randInt = getRandInt(queriedImages.hits.length));
-        loadImages();
-        try {
-          setImageURL(queriedImages.hits[randInt].largeImageURL);
-          setCredits(queriedImages.hits[randInt].user);
-          setPageURL(queriedImages.hits[randInt].pageURL);
-        } catch (err) {
-          alert("No search results found");
-        }
+        displayImage();
         break;
       case "setQuery":
         console.log(query);
@@ -76,10 +70,25 @@ export default function App() {
     }
   }
 
+  function displayImage() {
+    queriedImages.length === 0
+      ? (randInt = 0)
+      : (randInt = getRandInt(queriedImages.hits.length));
+    loadImages();
+    try {
+      setImageURL(queriedImages.hits[randInt].largeImageURL);
+      setCredits(queriedImages.hits[randInt].user);
+      setPageURL(queriedImages.hits[randInt].pageURL);
+    } catch (err) {
+      alert("No search results found");
+    }
+  }
+
   function loadImages() {
     let fullURL = "";
     query
-      ? (fullURL = url + "key=" + key + "&q=" + query + "&image_type=" + type)
+      ? (fullURL =
+          url + "key=" + key + "&q=" + query + "&image_type=" + type + "page=6")
       : (fullURL = url + "key=" + key + "&image_type=" + type);
 
     fetch(fullURL)
@@ -107,36 +116,37 @@ export default function App() {
   return (
     <React.Fragment>
       <Container fluid>
-      <Navbar bg="dark" expand="lg" className="mr-auto">
-        <Header onClick={handleClick} />
-        <Button
-          className="mr-sm-2"
-          variant="success"
-          name="getImage"
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-        >
-          Get Photo
-        </Button>
-        <input
-          className="mr-sm-2"
-          name="queryInput"
-          onChange={handleChange}
-          placeholder="Enter search terms here"
-        />
-        <div className="queryOutput">{query}</div>
-      </Navbar>
+        <Navbar bg="dark" expand="lg" className="mr-auto" fluid>
+          <Header onClick={handleClick} />
+          <Button
+            variant="success"
+            name="getImage"
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            className="mr-sm-2"
+          >
+            Get Photo
+          </Button>
+          <input
+            name="queryInput"
+            onChange={handleChange}
+            onKeyPress={handleKeyDown}
+            placeholder="Enter search terms here"
+            className="mr-sm-2"
+          />
+          <div className="queryOutput">{query}</div>
+        </Navbar>
       </Container>
-      <Container fluid>
-      {isPhotoHidden ? null : <Photo imageURL={imageURL} />}
-      {isCanvasHidden ? null : (
-        <Canvas isDrawing={isDrawing} setIsDrawing={setIsDrawing} />
-      )}
+      <Container className="my-auto CanvasContainer" fluid>
+        {isPhotoHidden ? null : <Photo imageURL={imageURL} />}
+        {isCanvasHidden ? null : (
+          <Canvas isDrawing={isDrawing} setIsDrawing={setIsDrawing} />
+        )}
       </Container>
       {imageURL === "" || isPhotoHidden ? null : (
         <Credits credits={credits} pageURL={pageURL} />
       )}
+      <Footer />
     </React.Fragment>
   );
 }
-
